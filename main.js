@@ -1,14 +1,11 @@
 define(["base/js/namespace", "base/js/events", "base/js/utils", "require"], function(Jupyter, events, utils, require) {
-  var params = {};
-  // updates default params with any specified in the server's config
-  var update_params = function() {
-    var config = Jupyter.notebook.config;
-    for (var key in params) {
-      if (config.data.hasOwnProperty(key)) {
-        params[key] = config.data[key];
-      }
-    }
+  var params = {
+    use_small_progress: true
   };
+
+  // updates default params with any specified in the server's config
+  conf = $.extend(true, params, Jupyter.notebook.config.data);
+  conf.progressSize = conf.use_small_progress ? "sm" : "lg";
 
   var echoResults = function() {
     if (document.hidden) {
@@ -16,9 +13,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require"], func
       return;
     }
     $.getJSON(utils.get_body_data("baseUrl") + "echo", function(data) {
-      // $("#nb-memory-usage").trigger("memory-data", data);
-      $(document).trigger("memory-data", data);
-
+      $(`#nb-memory-usage-${conf.progressSize}`).trigger("memory-data", data);
       console.log(data);
     });
   };
@@ -37,9 +32,8 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require"], func
     // Update every five seconds, eh?
     setInterval(echoResults, 1000 * 3);
 
-    // $("#nb-memory-usage").on("memory-data", function(data) {
-    $(document).on("memory-data", function(data, memoryData) {
-      // $("#nb-memory-usage").on("memory-data", function(data, memoryData) {
+    // $(document).on("memory-data", function(data, memoryData) {
+    $(`#nb-memory-usage-${conf.progressSize}`).on("memory-data", function(data, memoryData) {
       updateProgress(memoryData);
     });
 
@@ -65,9 +59,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require"], func
     return require(["text!nbextensions/memory_monitor/static/hello.html"], function(text) {
       // use text
       console.log(text);
-      $("#maintoolbar-container")
-        // .append("<div>Hello Adam</div>")
-        .append(text);
+      $("#maintoolbar-container").append(text);
 
       $("head").append('<style type="text/css"> .noheader { height: 100% !important }</style>');
       return Jupyter.notebook.config.loaded.then(initialize);
