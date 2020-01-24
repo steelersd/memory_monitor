@@ -27,6 +27,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require"], func
   };
 
   var initialize = function() {
+    $(`#nb-memory-usage-${conf.progressSize}`).show();
     // $("#nb-memory-usage-sm").hide();
     echoResults();
     // Update every five seconds, eh?

@@ -7,3 +7,6 @@
 .mem-mon-danger {
   background-color: #dc3545 !important;
 }
+.mem-mon-hidded {
+  display: none;
+}
