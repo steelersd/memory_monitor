@@ -25,13 +25,14 @@ define(["base/js/namespace", "base/js/events", "base/js/utils"], function(Jupyte
 
   let updateProgress = memoryData => {
     percent_in_usage = Math.floor(memoryData.percent_in_usage * 100);
-    $("#nb-memory-usage-progress")
+    $(".nb-memory-usage-progress")
       .css("width", percent_in_usage + "%")
-      .attr("aria-valuenow", percent_in_usage)
-      .text(percent_in_usage + "% Used");
+      .attr("aria-valuenow", percent_in_usage);
+    // .text(percent_in_usage + "% Used");
   };
 
   var initialize = function() {
+    // $("#nb-memory-usage-sm").hide();
     echoResults();
     // Update every five seconds, eh?
     setInterval(echoResults, 1000 * 3);
@@ -61,8 +62,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils"], function(Jupyte
       console.log(text);
       $("#maintoolbar-container")
         // .append("<div>Hello Adam</div>")
-        .append(text)
-        .addClass("pull-right");
+        .append(text);
 
       $("head").append('<style type="text/css"> .noheader { height: 100% !important }</style>');
       return Jupyter.notebook.config.loaded.then(initialize);
