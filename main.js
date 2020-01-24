@@ -1,4 +1,4 @@
-define(["base/js/namespace", "base/js/events", "base/js/utils"], function(Jupyter, events, utils) {
+define(["base/js/namespace", "base/js/events", "base/js/utils", "require"], function(Jupyter, events, utils, require) {
   var params = {};
   // updates default params with any specified in the server's config
   var update_params = function() {
@@ -57,6 +57,11 @@ define(["base/js/namespace", "base/js/events", "base/js/utils"], function(Jupyte
   };
 
   var load_ipython_extension = function() {
+    // add css
+    $('<link rel="stylesheet" type="text/css">')
+      .attr("href", require.toUrl("./static/main.css"))
+      .appendTo("head");
+
     return require(["text!nbextensions/memory_monitor/static/hello.html"], function(text) {
       // use text
       console.log(text);
