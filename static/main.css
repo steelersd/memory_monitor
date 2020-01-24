@@ -1,3 +1,9 @@
-.mem-mon-green {
+.mem-mon-success {
   background-color: #28a745 !important;
+}
+.mem-mon-warn {
+  background-color: #ffc107 !important;
+}
+.mem-mon-danger {
+  background-color: #dc3545 !important;
 }
