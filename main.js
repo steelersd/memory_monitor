@@ -9,8 +9,9 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   var params = {
     use_large_progress: false,
     poll_interval: 2,
-    warn_threshhold: 65,
-    danger_threshhold: 70,
+    warn_threshold: 65,
+    danger_threshold: 70,
+    kernel_restart_threshold: 95,
     console_log_data: false
   };
 
@@ -44,14 +45,25 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     $(".nb-memory-usage-progress").removeClassLike("mem-mon-progress-color");
     addClass = clazz => $(".nb-memory-usage-progress").addClass(clazz);
     switch (true) {
-      case percent_in_usage >= con.danger_threshhold:
+      case percent_in_usage >= con.danger_threshold:
         addClass("mem-mon-progress-color-danger");
         break;
-      case percent_in_usage >= con.warn_threshhold:
+      case percent_in_usage >= con.warn_threshold:
         addClass("mem-mon-progress-color-warn");
         break;
       default:
         addClass("mem-mon-progress-color-success");
+    }
+  };
+
+  let interruptKernel = (memoryData, con) => {
+    percent_in_usage = Math.floor(memoryData.percent_in_usage * 100);
+    if (percent_in_usage >= con.kernel_restart_threshold) {
+      let d = Date(Date.now());
+      console.warn(
+        `${d}: The RAM got to ${percent_in_usage}%. The Kernel Restart threshold is ${con.kernel_restart_threshold}%. The Kernel is restarting...`
+      );
+      Jupyter.notebook.kernel.restart();
     }
   };
 
@@ -64,6 +76,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     $(`#nb-memory-usage-${conf.progressSize}`).on("memory-data", function(data, memoryData) {
       updateProgress(memoryData);
       updateProgressColor(memoryData, conf);
+      interruptKernel(memoryData, conf);
     });
 
     document.addEventListener(

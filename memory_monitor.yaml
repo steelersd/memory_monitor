@@ -17,3 +17,7 @@ Parameters:
     description: Time interval in seconds for polling the memory data. Min 1, Max 5.
     input_type: number
     default: 2
+  - name: memorymonitor.kernel_restart_threshold
+    description: The Kerel Restart Threshold defined as a percentage. When the RAM reaches this theshold, the Kernel will be restarted.
+    input_type: number
+    default: 95
