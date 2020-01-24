@@ -22,11 +22,6 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     conf.poll_interval < 1 ? 1 : Math.min(conf.poll_interval, 5);
 
   let getAndHandleData = async () => {
-    // Don't poll when nobody is looking
-    if (document.hidden) {
-      return;
-    }
-
     const response = await fetch(`${utils.get_body_data("baseUrl")}echo`);
     data = await response.json();
     $(`#nb-memory-usage-${conf.progressSize}`).trigger("memory-data", data);
@@ -79,18 +74,6 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
       updateProgressColor(memoryData, conf);
       interruptKernel(memoryData, conf);
     });
-
-    document.addEventListener(
-      "visibilitychange",
-      function() {
-        // Update instantly when user activates notebook tab
-        // FIXME: Turn off update timer completely when tab not in focus
-        if (!document.hidden) {
-          getAndHandleData();
-        }
-      },
-      false
-    );
   };
 
   var load_ipython_extension = function() {
