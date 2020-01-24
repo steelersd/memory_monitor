@@ -17,17 +17,20 @@ class EchoHandler(IPythonHandler):
         IPythonHandler.__init__(self, *args, **kwargs)
         self.memory_limit = EchoHandler.get_memory_limit()
 
+        # https://www.tornadoweb.org/en/stable/concurrent.html#tornado.concurrent.run_on_executor
+        self.executor = ThreadPoolExecutor(max_workers=10
+
     @web.authenticated
     async def get(self):
         def date_handler(o):
             if isinstance(o, datetime.datetime):
                 return o.__str__()
 
-        response = {}
-        response['date'] = datetime.datetime.now()
-        response['memory_used'] = EchoHandler.get_memory_used()
-        response['get_memory_limit'] = self.memory_limit
-        response['percent_in_usage'] = response["memory_used"] / \
+        response={}
+        response['date']=datetime.datetime.now()
+        response['memory_used']=EchoHandler.get_memory_used()
+        response['get_memory_limit']=self.memory_limit
+        response['percent_in_usage']=response["memory_used"] /
             response["get_memory_limit"]
         self.set_status(200)
         self.set_header('Content-Type', 'application/json')
@@ -40,16 +43,16 @@ class EchoHandler(IPythonHandler):
     @staticmethod
     def get_memory_used():
         if "MEM_LIMIT" in os.environ:
-            cur_process = psutil.Process()
-            all_processes = [cur_process] + \
+            cur_process=psutil.Process()
+            all_processes=[cur_process] + \
                 cur_process.children(recursive=True)
-            limits = {}
+            limits={}
 
             # Get memory information
-            rss = sum([p.memory_info().rss for p in all_processes])
+            rss=sum([p.memory_info().rss for p in all_processes])
             return rss
         else:
-            available = psutil.virtual_memory().total - psutil.virtual_memory().available
+            available=psutil.virtual_memory().total - psutil.virtual_memory().available
             return float("%.1f" % (available / BYTES_IN_GIG))
 
     '''
@@ -58,11 +61,11 @@ class EchoHandler(IPythonHandler):
     '''
     @staticmethod
     def get_memory_limit():
-        mem_limit = 0
+        mem_limit=0
         if "MEM_LIMIT" in os.environ:
-            mem_limit = os.environ.get('MEM_LIMIT')
+            mem_limit=os.environ.get('MEM_LIMIT')
         else:
-            mem_limit = float("%.1f" %
+            mem_limit=float("%.1f" %
                               (psutil.virtual_memory().total / BYTES_IN_GIG))
         return mem_limit
 
@@ -89,6 +92,6 @@ def load_jupyter_server_extension(nbapp):
     """
     Called during notebook start
     """
-    route_pattern = url_path_join(
+    route_pattern=url_path_join(
         nbapp.web_app.settings['base_url'], '/echo')
     nbapp.web_app.add_handlers('.*', [(route_pattern, EchoHandler)])
