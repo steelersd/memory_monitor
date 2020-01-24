@@ -21,15 +21,16 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   conf.poll_interval = Jupyter.notebook.config.data.memorymonitor.poll_interval =
     conf.poll_interval < 1 ? 1 : Math.min(conf.poll_interval, 5);
 
-  var echoResults = function() {
+  let getAndHandleData = async () => {
+    // Don't poll when nobody is looking
     if (document.hidden) {
-      // Don't poll when nobody is looking
       return;
     }
-    $.getJSON(utils.get_body_data("baseUrl") + "echo", function(data) {
-      $(`#nb-memory-usage-${conf.progressSize}`).trigger("memory-data", data);
-      conf.console_log_data && console.log(data);
-    });
+
+    const response = await fetch(`${utils.get_body_data("baseUrl")}echo`);
+    data = await response.json();
+    $(`#nb-memory-usage-${conf.progressSize}`).trigger("memory-data", data);
+    conf.console_log_data && console.log(data);
   };
 
   let updateProgress = memoryData => {
@@ -69,9 +70,9 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
 
   var initialize = function() {
     $(`#nb-memory-usage-${conf.progressSize}`).show();
-    echoResults();
+    getAndHandleData();
     // Update every N seconds?
-    setInterval(echoResults, 1000 * conf.poll_interval);
+    setInterval(getAndHandleData, 1000 * conf.poll_interval);
 
     $(`#nb-memory-usage-${conf.progressSize}`).on("memory-data", function(data, memoryData) {
       updateProgress(memoryData);
@@ -85,7 +86,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
         // Update instantly when user activates notebook tab
         // FIXME: Turn off update timer completely when tab not in focus
         if (!document.hidden) {
-          echoResults();
+          getAndHandleData();
         }
       },
       false
