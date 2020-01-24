@@ -85,7 +85,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
       .appendTo("head");
 
     // Load Extension html
-    return require(["text!nbextensions/memory_monitor/static/hello.html"], function(text) {
+    return require(["text!nbextensions/memory_monitor/static/main.html"], function(text) {
       $("#maintoolbar-container").append(text);
       return Jupyter.notebook.config.loaded.then(initialize);
     }, function(err) {
