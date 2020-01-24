@@ -13,3 +13,7 @@ Parameters:
     description: Console Log the Memory Data
     input_type: checkbox
     default: false
+  - name: memorymonitor.poll_interval
+    description: Time interval in seconds for polling the memory data. Min 1, Max 5.
+    input_type: number
+    default: 2

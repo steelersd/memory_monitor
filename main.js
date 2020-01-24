@@ -1,3 +1,4 @@
+// https://github.com/jupyter/notebook/blob/b8b66332e2023e83d2ee04f83d8814f567e01a4e/notebook/tests/services/kernel.js
 define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./utils"], function(
   Jupyter,
   events,
@@ -7,6 +8,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
 ) {
   var params = {
     use_large_progress: false,
+    poll_interval: 2,
     warn_threshhold: 65,
     danger_threshhold: 70,
     console_log_data: false
@@ -15,6 +17,8 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   // updates default params with any specified in the server's config
   conf = $.extend(true, params, Jupyter.notebook.config.data.memorymonitor);
   conf.progressSize = conf.use_large_progress ? "lg" : "sm";
+  conf.poll_interval = Jupyter.notebook.config.data.memorymonitor.poll_interval =
+    conf.poll_interval < 1 ? 1 : Math.min(conf.poll_interval, 5);
 
   var echoResults = function() {
     if (document.hidden) {
@@ -55,7 +59,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     $(`#nb-memory-usage-${conf.progressSize}`).show();
     echoResults();
     // Update every N seconds?
-    setInterval(echoResults, 1000 * 3);
+    setInterval(echoResults, 1000 * conf.poll_interval);
 
     $(`#nb-memory-usage-${conf.progressSize}`).on("memory-data", function(data, memoryData) {
       updateProgress(memoryData);
