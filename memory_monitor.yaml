@@ -5,7 +5,11 @@ Description: Monitor's the memory consumption, and shuts down the kernel.
 Main: main.js
 Compatibility: 4.x, 5.x
 Parameters:
-  - name: use_large_progress
+  - name: memorymonitor.use_large_progress
     description: Display large Memory Progress Indicator
+    input_type: checkbox
+    default: false
+  - name: memorymonitor.console_log_data
+    description: Console Log the Memory Data
     input_type: checkbox
     default: false

@@ -1,10 +1,10 @@
-.mem-mon-success {
+.mem-mon-progress-color-success {
   background-color: #28a745 !important;
 }
-.mem-mon-warn {
+.mem-mon-progress-color-warn {
   background-color: #ffc107 !important;
 }
-.mem-mon-danger {
+.mem-mon-progress-color-danger {
   background-color: #dc3545 !important;
 }
 .mem-mon-hidded {
