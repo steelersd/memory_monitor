@@ -15,9 +15,11 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     console_log_data: false
   };
 
-  // updates default params with any specified in the server's config
+  // Updates default params with any specified in the server's config
   conf = $.extend(true, params, Jupyter.notebook.config.data.memorymonitor);
   conf.progressSize = conf.use_large_progress ? "lg" : "sm";
+
+  // Restrict values between 1 and 5
   conf.poll_interval = Jupyter.notebook.config.data.memorymonitor.poll_interval =
     conf.poll_interval < 1 ? 1 : Math.min(conf.poll_interval, 5);
 
@@ -63,7 +65,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     }
   };
 
-  var initialize = function() {
+  let initialize = () => {
     $(`#nb-memory-usage-${conf.progressSize}`).show();
     getAndHandleData();
     // Update every N seconds?
@@ -76,7 +78,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     });
   };
 
-  var load_ipython_extension = function() {
+  let load_ipython_extension = () => {
     // Add Extension css
     $('<link rel="stylesheet" type="text/css">')
       .attr("href", require.toUrl("./static/main.css"))
