@@ -12,25 +12,15 @@ setuptools.setup(
     # ],
     include_package_data=True,
     data_files=[
+        # like `jupyter nbextension install --sys-prefix`
         ('share/jupyter/nbextensions/memory_monitor',
          glob('memory_monitor/static/*')),
+        # like `jupyter nbextension enable --sys-prefix`
         ('etc/jupyter/nbconfig/notebook.d',
          ['memory_monitor/etc/nbextension.json']),
+        # like `jupyter serverextension enable --sys-prefix`
         ('etc/jupyter/jupyter_notebook_config.d',
          ['memory_monitor/etc/serverextension.json']),
     ],
-    # data_files=[
-    #     # like `jupyter nbextension install --sys-prefix`
-    #     ("share/jupyter/nbextensions/my_fancy_module", [
-    #         "memory_monitor/static/index.js",
-    #     ]),
-    #     # like `jupyter nbextension enable --sys-prefix`
-    #     ("etc/jupyter/nbconfig/notebook.d", [
-    #         "etc/serverextension.json"
-    #     ]),
-    #     # like `jupyter serverextension enable --sys-prefix`
-    #     ("etc/jupyter/jupyter_notebook_config.d", [
-    #         "jupyter-config/jupyter_notebook_config.d/my_fancy_module.json"
-    #     ])
-    # ]
+
 )
