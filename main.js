@@ -53,12 +53,10 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
 
   var initialize = function() {
     $(`#nb-memory-usage-${conf.progressSize}`).show();
-    // $("#nb-memory-usage-sm").hide();
     echoResults();
-    // Update every five seconds, eh?
+    // Update every N seconds?
     setInterval(echoResults, 1000 * 3);
 
-    // $(document).on("memory-data", function(data, memoryData) {
     $(`#nb-memory-usage-${conf.progressSize}`).on("memory-data", function(data, memoryData) {
       updateProgress(memoryData);
       updateProgressColor(memoryData, conf);
@@ -78,23 +76,17 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   };
 
   var load_ipython_extension = function() {
-    // add css
+    // Add Extension css
     $('<link rel="stylesheet" type="text/css">')
       .attr("href", require.toUrl("./static/main.css"))
       .appendTo("head");
 
+    // Load Extension html
     return require(["text!nbextensions/memory_monitor/static/hello.html"], function(text) {
-      // use text
-      console.log(text);
       $("#maintoolbar-container").append(text);
-
-      // $("head").append('<style type="text/css"> .noheader { height: 100% !important }</style>');
       return Jupyter.notebook.config.loaded.then(initialize);
-      // return true;
     }, function(err) {
       console.log("Error", err);
-      // OPTIONAL BUT GOOD PRACTICE
-      // handle error
     });
   };
 
