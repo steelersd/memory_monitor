@@ -1,11 +1,11 @@
 define(["base/js/namespace", "base/js/events", "base/js/utils", "require"], function(Jupyter, events, utils, require) {
   var params = {
-    use_small_progress: true
+    use_large_progress: false
   };
 
   // updates default params with any specified in the server's config
   conf = $.extend(true, params, Jupyter.notebook.config.data);
-  conf.progressSize = conf.use_small_progress ? "sm" : "lg";
+  conf.progressSize = conf.use_large_progress ? "lg" : "sm";
 
   var echoResults = function() {
     if (document.hidden) {
@@ -61,7 +61,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require"], func
       console.log(text);
       $("#maintoolbar-container").append(text);
 
-      $("head").append('<style type="text/css"> .noheader { height: 100% !important }</style>');
+      // $("head").append('<style type="text/css"> .noheader { height: 100% !important }</style>');
       return Jupyter.notebook.config.loaded.then(initialize);
       // return true;
     }, function(err) {

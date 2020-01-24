@@ -5,7 +5,7 @@ Description: Monitor's the memory consumption, and shuts down the kernel.
 Main: main.js
 Compatibility: 4.x, 5.x
 Parameters:
-  - name: use_small_progress
-    description: Display either a small or large Memory Progress Indicator
+  - name: use_large_progress
+    description: Display large Memory Progress Indicator
     input_type: checkbox
-    default: true
+    default: false
