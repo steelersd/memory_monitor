@@ -15,6 +15,35 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     console_log_data: false
   };
 
+  let getAndHandleDataInterval = [];
+  let restartKernelEnabled = true;
+  let restartKernelBusy = false;
+
+  events.on("kernel_created.Kernel", data => {
+    console.log("kernel_created.Kernel", data);
+    console.log("===================== Start");
+    restartKernelBusy = false;
+    getAndHandleDataInterval.map(console.log);
+    getAndHandleDataInterval.map(clearInterval);
+    getAndHandleDataInterval.map(console.log);
+    // interval = setInterval(getAndHandleData, 1000 * conf.poll_interval);
+    interval = setInterval(getAndHandleData, 1000 * 3);
+    getAndHandleDataInterval.push(interval);
+  });
+
+  events.on("kernel_restarting.Kernel", data => {
+    console.log("kernel_restarting.Kernel", data);
+    console.log("+++++++++++++++++++++++ Restarting");
+    restartKernelBusy = true;
+    getAndHandleDataInterval.map(clearInterval);
+    getAndHandleDataInterval.pop();
+    // clearInterval(getAndHandleDataInterval);
+  });
+
+  // events.on("kernel_created.Kernel", data => {
+  //   console.log("kernel_created.Kernel", data);
+  // });
+
   // Updates default params with any specified in the server's config
   conf = $.extend(true, params, Jupyter.notebook.config.data.memorymonitor);
   conf.progressSize = conf.use_large_progress ? "lg" : "sm";
@@ -79,6 +108,8 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   };
 
   let interruptKernel = (memoryData, conf) => {
+    if (!restartKernelEnabled || restartKernelBusy) return;
+
     percent_in_usage = Math.floor(memoryData.percent_in_usage * 100);
     if (percent_in_usage >= conf.kernel_restart_threshold) {
       let d = Date(Date.now());
@@ -94,7 +125,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     doubleClickHandlerProgress(conf);
     getAndHandleData();
     // Update every N seconds?
-    setInterval(getAndHandleData, 1000 * conf.poll_interval);
+    // setInterval(getAndHandleData, 1000 * conf.poll_interval);
     onDataHandler(conf);
   };
 
@@ -102,7 +133,13 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     {
       help: "Memory Monitor: On/Off Kernel Restart",
       icon: "fa-desktop",
-      handler: (value, blah) => console.log(value, blah)
+      handler: data => {
+        restartKernelEnabled = !restartKernelEnabled;
+        let color = restartKernelEnabled ? "black" : "#dc3545";
+        $($("button[data-jupyter-action='memory_monitor:toggle_kernel'] i")[0]).wrap(
+          `<span style="font-size: 1em; color: ${color};">`
+        );
+      }
     },
     "toggle_kernel",
     "memory_monitor"
