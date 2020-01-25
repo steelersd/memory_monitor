@@ -20,8 +20,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   conf.progressSize = conf.use_large_progress ? "lg" : "sm";
 
   // Restrict values between 1 and 5
-  conf.poll_interval = Jupyter.notebook.config.data.memorymonitor.poll_interval =
-    conf.poll_interval < 1 ? 1 : Math.min(conf.poll_interval, 5);
+  conf.poll_interval = conf.poll_interval < 1 ? 1 : Math.min(conf.poll_interval, 5);
 
   let onDataHandler = conf => {
     $(`#nb-memory-usage-${conf.progressSize}`).on("memory-data", function(data, memoryData) {
@@ -99,6 +98,16 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     onDataHandler(conf);
   };
 
+  let action_name = IPython.keyboard_manager.actions.register(
+    {
+      help: "Memory Monitor: On/Off Kernel Restart",
+      icon: "fa-desktop",
+      handler: (value, blah) => console.log(value, blah)
+    },
+    "toggle_kernel",
+    "memory_monitor"
+  );
+
   let load_ipython_extension = () => {
     // Add Extension css
     $('<link rel="stylesheet" type="text/css">')
@@ -107,8 +116,13 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
 
     // Load Extension html
     return require(["text!nbextensions/memory_monitor/static/main.html"], function(text) {
-      $("#maintoolbar-container").append(text);
-      return Jupyter.notebook.config.loaded.then(initialize(conf));
+      // $("#header-container").append(text);
+
+      $("#maintoolbar-container").after(text);
+      return Jupyter.notebook.config.loaded.then(() => {
+        initialize(conf);
+        Jupyter.toolbar.add_buttons_group([action_name]);
+      });
     }, function(err) {
       console.log("Error", err);
     });
