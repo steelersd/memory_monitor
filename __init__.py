@@ -6,6 +6,7 @@ from notebook.utils import url_path_join
 from tornado import web
 import datetime
 from resource import getrusage, RUSAGE_SELF
+from concurrent.futures import ThreadPoolExecutor
 
 
 BYTES_IN_GIG = 1073741824.0
