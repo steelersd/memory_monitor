@@ -23,6 +23,24 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   conf.poll_interval = Jupyter.notebook.config.data.memorymonitor.poll_interval =
     conf.poll_interval < 1 ? 1 : Math.min(conf.poll_interval, 5);
 
+  let onDataHandler = conf => {
+    $(`#nb-memory-usage-${conf.progressSize}`).on("memory-data", function(data, memoryData) {
+      conf.use_large_progress ? updateProgressLg(memoryData) : updateProgressSm(memoryData);
+      updateProgressColor(memoryData, conf);
+      interruptKernel(memoryData, conf);
+    });
+  };
+
+  let doubleClickHandlerProgress = conf => {
+    $(".mem-mon-container").dblclick(function() {
+      $(`#nb-memory-usage-${conf.progressSize}`).hide();
+      conf.use_large_progress = !conf.use_large_progress;
+      conf.progressSize = conf.use_large_progress ? "lg" : "sm";
+      $(`#nb-memory-usage-${conf.progressSize}`).show();
+      onDataHandler(conf);
+    });
+  };
+
   let getAndHandleData = async () => {
     const response = await fetch(`${utils.get_body_data("baseUrl")}echo`);
     data = await response.json();
@@ -74,15 +92,11 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
 
   let initialize = () => {
     $(`#nb-memory-usage-${conf.progressSize}`).show();
+    doubleClickHandlerProgress(conf);
     getAndHandleData();
     // Update every N seconds?
     setInterval(getAndHandleData, 1000 * conf.poll_interval);
-
-    $(`#nb-memory-usage-${conf.progressSize}`).on("memory-data", function(data, memoryData) {
-      conf.use_large_progress ? updateProgressLg(memoryData) : updateProgressSm(memoryData);
-      updateProgressColor(memoryData, conf);
-      interruptKernel(memoryData, conf);
-    });
+    onDataHandler(conf);
   };
 
   let load_ipython_extension = () => {
