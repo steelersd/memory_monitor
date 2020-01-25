@@ -30,12 +30,19 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     conf.console_log_data && console.log(data);
   };
 
-  let updateProgress = memoryData => {
+  let updateProgressLg = memoryData => {
     percent_in_usage = Math.floor(memoryData.percent_in_usage * 100);
-    $(".nb-memory-usage-progress")
+    $(`#nb-memory-usage-${conf.progressSize} .nb-memory-usage-progress`)
+      .css("width", percent_in_usage + "%")
+      .attr("aria-valuenow", percent_in_usage)
+      .text(percent_in_usage + "% Used");
+  };
+
+  let updateProgressSm = memoryData => {
+    percent_in_usage = Math.floor(memoryData.percent_in_usage * 100);
+    $(`#nb-memory-usage-${conf.progressSize} .nb-memory-usage-progress`)
       .css("width", percent_in_usage + "%")
       .attr("aria-valuenow", percent_in_usage);
-    // .text(percent_in_usage + "% Used");
   };
 
   let updateProgressColor = (memoryData, con) => {
@@ -72,7 +79,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     setInterval(getAndHandleData, 1000 * conf.poll_interval);
 
     $(`#nb-memory-usage-${conf.progressSize}`).on("memory-data", function(data, memoryData) {
-      updateProgress(memoryData);
+      conf.use_large_progress ? updateProgressLg(memoryData) : updateProgressSm(memoryData);
       updateProgressColor(memoryData, conf);
       interruptKernel(memoryData, conf);
     });
