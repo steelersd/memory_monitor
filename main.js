@@ -79,18 +79,18 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     }
   };
 
-  let interruptKernel = (memoryData, con) => {
+  let interruptKernel = (memoryData, conf) => {
     percent_in_usage = Math.floor(memoryData.percent_in_usage * 100);
-    if (percent_in_usage >= con.kernel_restart_threshold) {
+    if (percent_in_usage >= conf.kernel_restart_threshold) {
       let d = Date(Date.now());
       console.warn(
-        `${d}: The RAM got to ${percent_in_usage}%. The Kernel Restart threshold is ${con.kernel_restart_threshold}%. The Kernel is restarting...`
+        `${d}: The RAM got to ${percent_in_usage}%. The Kernel Restart threshold is ${conf.kernel_restart_threshold}%. The Kernel is restarting...`
       );
       Jupyter.notebook.kernel.restart();
     }
   };
 
-  let initialize = () => {
+  let initialize = conf => {
     $(`#nb-memory-usage-${conf.progressSize}`).show();
     doubleClickHandlerProgress(conf);
     getAndHandleData();
@@ -108,7 +108,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     // Load Extension html
     return require(["text!nbextensions/memory_monitor/static/main.html"], function(text) {
       $("#maintoolbar-container").append(text);
-      return Jupyter.notebook.config.loaded.then(initialize);
+      return Jupyter.notebook.config.loaded.then(initialize(conf));
     }, function(err) {
       console.log("Error", err);
     });
