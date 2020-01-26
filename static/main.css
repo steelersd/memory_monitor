@@ -10,3 +10,12 @@
 .mem-mon-hidden {
   display: none;
 }
+#nb-memory-usage-sm {
+  top: -20px;
+  height: 10px;
+  width: 120px;
+}
+#nb-memory-usage-lg {
+  margin-top: 18px;
+  width: 500px;
+}
