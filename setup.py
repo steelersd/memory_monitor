@@ -3,9 +3,14 @@ import setuptools
 
 setuptools.setup(
     name="memory_monitor",
+    packages=['memory_monitor'],
     version='0.1.0',
+    name="memory_monitor",
+    license='MIT',
     description="Simple Jupyter extension to show how much resources (RAM) your notebook is using",
-    packages=setuptools.find_packages(),
+    url="https://github.com/steelersd/memory_monitor",
+    download_url="https://github.com/steelersd/memory_monitor/archive/0.1.0.tar.gz",
+    keywords=['Jupyter', 'Notebook', 'Extension'],
     # install_requires=[
     #     'psutil',
     #     'notebook',
