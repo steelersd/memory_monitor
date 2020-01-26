@@ -20,29 +20,19 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   let restartKernelBusy = false;
 
   events.on("kernel_created.Kernel", data => {
-    console.log("kernel_created.Kernel", data);
-    console.log("===================== Start");
+    console.log("memory-monitory:kernel_created.Kernel", data);
     restartKernelBusy = false;
-    getAndHandleDataInterval.map(console.log);
     getAndHandleDataInterval.map(clearInterval);
-    getAndHandleDataInterval.map(console.log);
-    // interval = setInterval(getAndHandleData, 1000 * conf.poll_interval);
-    interval = setInterval(getAndHandleData, 1000 * 3);
+    interval = setInterval(getAndHandleData, 1000 * conf.poll_interval);
     getAndHandleDataInterval.push(interval);
   });
 
   events.on("kernel_restarting.Kernel", data => {
-    console.log("kernel_restarting.Kernel", data);
-    console.log("+++++++++++++++++++++++ Restarting");
+    console.log("memory-monitorykernel_restarting.Kernel", data);
     restartKernelBusy = true;
     getAndHandleDataInterval.map(clearInterval);
     getAndHandleDataInterval.pop();
-    // clearInterval(getAndHandleDataInterval);
   });
-
-  // events.on("kernel_created.Kernel", data => {
-  //   console.log("kernel_created.Kernel", data);
-  // });
 
   // Updates default params with any specified in the server's config
   conf = $.extend(true, params, Jupyter.notebook.config.data.memorymonitor);

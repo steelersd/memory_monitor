@@ -1,8 +1,8 @@
 <!-- https://codepen.io/jbeurel/pen/zuDAl -->
 <!-- https://codepen.io/gustitammam/pen/RRXGdj -->
 
-<div class="flexcontainer pull-left">
-  <div id="nb-memory-usage-lg" class="progress mem-mon-container container mem-mon-hidden">
+<div id="nb-memory-usage-lg" style="display: none;" class="flexcontainer pull-left mem-mon-container">
+  <div class="progress progress-lg">
       <div
         id="nb-memory-usage-progress"
         class="progress-bar nb-memory-usage-progress mem-mon-progress-color-success"
@@ -13,12 +13,12 @@
         style="width:0%"
       ></div>
   </div>
-  <div id="mem-used-limit" class="Aligner-item">Hello</div>
+  <div id="mem-used-limit"></div>
 </div>
 
 <div
-  id="nb-memory-usage-sm"
-  class="progress btn-group pull-right mem-mon-hidden mem-mon-container"
+  id="nb-memory-usage-sm" style="display: none;"
+  class="progress progress-sm pull-right mem-mon-container"
 >
   <div
     class="progress-bar nb-memory-usage-progress mem-mon-progress-color-success"

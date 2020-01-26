@@ -7,17 +7,16 @@
 .mem-mon-progress-color-danger {
   background-color: #dc3545 !important;
 }
-.mem-mon-hidden {
-  display: none;
-}
-#nb-memory-usage-sm {
-  top: -20px;
+.progress-sm {
   height: 10px;
   width: 120px;
 }
-#nb-memory-usage-lg {
+.progress-lg {
   margin-top: 18px;
   width: 500px;
+}
+#nb-memory-usage-sm {
+  margin-top: -20px;
 }
 .flexcontainer {
   display: flex;
