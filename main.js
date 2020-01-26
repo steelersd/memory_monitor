@@ -67,6 +67,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
       conf.progressSize = conf.use_large_progress ? "lg" : "sm";
       $(`#nb-memory-usage-${conf.progressSize}`).show();
       onDataHandler(conf);
+      getAndHandleData();
     });
   };
 
@@ -126,7 +127,6 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
     doubleClickHandlerProgress(conf);
     getAndHandleData();
     // Update every N seconds?
-    // setInterval(getAndHandleData, 1000 * conf.poll_interval);
     onDataHandler(conf);
   };
 
@@ -154,8 +154,6 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
 
     // Load Extension html
     return require(["text!nbextensions/memory_monitor/static/main.html"], function(text) {
-      // $("#header-container").append(text);
-
       $("#maintoolbar-container").after(text);
       return Jupyter.notebook.config.loaded.then(() => {
         initialize(conf);
