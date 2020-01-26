@@ -22,16 +22,11 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   events.on("kernel_created.Kernel", data => {
     console.log("memory-monitory:kernel_created.Kernel", data);
     restartKernelBusy = false;
-    // getAndHandleDataInterval.map(clearInterval);
-    // interval = setInterval(getAndHandleData, 1000 * conf.poll_interval);
-    // getAndHandleDataInterval.push(interval);
   });
 
   events.on("kernel_restarting.Kernel", data => {
     console.log("memory-monitorykernel_restarting.Kernel", data);
     restartKernelBusy = true;
-    // getAndHandleDataInterval.map(clearInterval);
-    // getAndHandleDataInterval.pop();
   });
 
   // Updates default params with any specified in the server's config
@@ -115,9 +110,9 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   let initialize = conf => {
     $(`#nb-memory-usage-${conf.progressSize}`).show();
     doubleClickHandlerProgress(conf);
-    setInterval(getAndHandleData, 1000 * conf.poll_interval);
-    // getAndHandleData();
+    getAndHandleData();
     // Update every N seconds?
+    setInterval(getAndHandleData, 1000 * conf.poll_interval);
     onDataHandler(conf);
   };
 
