@@ -6,7 +6,7 @@ Main: main.js
 Compatibility: 4.x, 5.x
 Parameters:
   - name: memorymonitor.use_large_progress
-    description: Display large Memory Progress Indicator
+    description: Default to large Memory Progress Indicator
     input_type: checkbox
     default: false
   - name: memorymonitor.console_log_data
@@ -17,6 +17,14 @@ Parameters:
     description: Time interval in seconds for polling the memory data. Min 1, Max 5.
     input_type: number
     default: 2
+  - name: memorymonitor.warn_threshold
+    description: Warn Threshold defined as a percentage. When the RAM reaches this theshold, The Warning color will be displayed.
+    input_type: number
+    default: 80
+  - name: memorymonitor.danger_threshold
+    description: Danger Threshold defined as a percentage. When the RAM reaches this theshold, The Danger color will be displayed.
+    input_type: number
+    default: 90
   - name: memorymonitor.kernel_restart_threshold
     description: The Kerel Restart Threshold defined as a percentage. When the RAM reaches this theshold, the Kernel will be restarted.
     input_type: number

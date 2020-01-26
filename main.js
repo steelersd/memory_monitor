@@ -9,8 +9,8 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   var params = {
     use_large_progress: false,
     poll_interval: 2,
-    warn_threshold: 65,
-    danger_threshold: 70,
+    warn_threshold: 80,
+    danger_threshold: 90,
     kernel_restart_threshold: 95,
     console_log_data: false
   };
