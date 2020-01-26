@@ -29,9 +29,9 @@ class MemoryHandler(IPythonHandler):
         response = {}
         response['date'] = datetime.datetime.now()
         response['memory_used'] = MemoryHandler.get_memory_used()
-        response['get_memory_limit'] = self.memory_limit
+        response['memory_limit'] = self.memory_limit
         response['percent_in_usage'] = (response["memory_used"] /
-                                        response["get_memory_limit"])
+                                        response["memory_limit"])
         self.set_status(200)
         self.set_header('Content-Type', 'application/json')
         self.write(json.dumps(response, default=date_handler))
@@ -53,7 +53,7 @@ class MemoryHandler(IPythonHandler):
             return rss
         else:
             available = psutil.virtual_memory().total - psutil.virtual_memory().available
-            return float("%.1f" % (available / BYTES_IN_GIG))
+            return float("%.2f" % (available / BYTES_IN_GIG))
 
     '''
     Max Memory is needed to determine how close the notebook is to running

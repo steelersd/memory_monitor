@@ -19,3 +19,13 @@
   margin-top: 18px;
   width: 500px;
 }
+.flexcontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+#mem-used-limit {
+  margin-left: 10px;
+  color: #565656;
+}

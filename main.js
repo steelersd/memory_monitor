@@ -56,6 +56,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
       conf.use_large_progress ? updateProgressLg(memoryData) : updateProgressSm(memoryData);
       updateProgressColor(memoryData, conf);
       interruptKernel(memoryData, conf);
+      $("#mem-used-limit").text(`${memoryData.memory_used}GB/${memoryData.memory_limit}GB`);
     });
   };
 
