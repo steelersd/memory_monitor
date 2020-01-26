@@ -70,7 +70,7 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   };
 
   let getAndHandleData = async () => {
-    const response = await fetch(`${utils.get_body_data("baseUrl")}echo`);
+    const response = await fetch(`${utils.get_body_data("baseUrl")}memory`);
     data = await response.json();
     $(`#nb-memory-usage-${conf.progressSize}`).trigger("memory-data", data);
     conf.console_log_data && console.log(data);

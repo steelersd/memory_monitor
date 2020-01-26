@@ -8,15 +8,14 @@ import datetime
 from resource import getrusage, RUSAGE_SELF
 from concurrent.futures import ThreadPoolExecutor
 
-
 BYTES_IN_GIG = 1073741824.0
 
 
-class EchoHandler(IPythonHandler):
+class MemoryHandler(IPythonHandler):
 
     def __init__(self, *args, **kwargs):
         IPythonHandler.__init__(self, *args, **kwargs)
-        self.memory_limit = EchoHandler.get_memory_limit()
+        self.memory_limit = MemoryHandler.get_memory_limit()
 
         # https://www.tornadoweb.org/en/stable/concurrent.html#tornado.concurrent.run_on_executor
         self.executor = ThreadPoolExecutor(max_workers=10)
@@ -29,7 +28,7 @@ class EchoHandler(IPythonHandler):
 
         response = {}
         response['date'] = datetime.datetime.now()
-        response['memory_used'] = EchoHandler.get_memory_used()
+        response['memory_used'] = MemoryHandler.get_memory_used()
         response['get_memory_limit'] = self.memory_limit
         response['percent_in_usage'] = (response["memory_used"] /
                                         response["get_memory_limit"])
@@ -94,5 +93,5 @@ def load_jupyter_server_extension(nbapp):
     Called during notebook start
     """
     route_pattern = url_path_join(
-        nbapp.web_app.settings['base_url'], '/echo')
-    nbapp.web_app.add_handlers('.*', [(route_pattern, EchoHandler)])
+        nbapp.web_app.settings['base_url'], '/memory')
+    nbapp.web_app.add_handlers('.*', [(route_pattern, MemoryHandler)])
