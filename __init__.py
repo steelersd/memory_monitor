@@ -84,7 +84,7 @@ def _jupyter_nbextension_paths():
         # directory in the `nbextension/` namespace
         dest="memory_monitor",
         # _also_ in the `nbextension/` namespace
-        require="memory_monitor/main")]
+        require="memory_monitor/static/main")]
 
 
 def load_jupyter_server_extension(nbapp):
