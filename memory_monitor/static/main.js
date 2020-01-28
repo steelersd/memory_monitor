@@ -135,11 +135,11 @@ define(["base/js/namespace", "base/js/events", "base/js/utils", "require", "./ut
   let load_ipython_extension = () => {
     // Add Extension css
     $('<link rel="stylesheet" type="text/css">')
-      .attr("href", require.toUrl("./static/main.css"))
+      .attr("href", require.toUrl("./main.css"))
       .appendTo("head");
 
     // Load Extension html
-    return require(["text!nbextensions/memory_monitor/static/main.html"], function(text) {
+    return require(["text!nbextensions/memory_monitor/main.html"], function(text) {
       $("#maintoolbar-container").after(text);
       return Jupyter.notebook.config.loaded.then(() => {
         initialize(conf);

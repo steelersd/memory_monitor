@@ -1,0 +1,5 @@
+{
+  "load_extensions": {
+    "memory_monitor/main": true
+  }
+}
