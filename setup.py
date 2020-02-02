@@ -4,7 +4,7 @@ import setuptools
 setuptools.setup(
     name="memory_monitor",
     packages=setuptools.find_packages(),
-    version='0.1.9',
+    version='0.1.11',
     license='MIT',
     description="Jupyter Extension that monitors the memory consumption, and shuts down the kernel",
     url="https://github.com/steelersd/memory_monitor",
