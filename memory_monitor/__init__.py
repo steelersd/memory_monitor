@@ -42,6 +42,7 @@ class MemoryHandler(IPythonHandler):
     # Maybe worth another look.
     @staticmethod
     def get_memory_used():
+        rss = 0
         if "MEM_LIMIT" in os.environ:
             cur_process = psutil.Process()
             all_processes = [cur_process] + \
@@ -50,10 +51,9 @@ class MemoryHandler(IPythonHandler):
 
             # Get memory information
             rss = sum([p.memory_info().rss for p in all_processes])
-            return rss
         else:
-            available = psutil.virtual_memory().total - psutil.virtual_memory().available
-            return float("%.2f" % (available / BYTES_IN_GIG))
+            rss = psutil.virtual_memory().total - psutil.virtual_memory().available
+        return float("%.2f" % (rss / BYTES_IN_GIG))
 
     '''
     Max Memory is needed to determine how close the notebook is to running
@@ -63,11 +63,12 @@ class MemoryHandler(IPythonHandler):
     def get_memory_limit():
         mem_limit = 0
         if "MEM_LIMIT" in os.environ:
-            mem_limit = os.environ.get('MEM_LIMIT')
+            mem_limit = float(os.environ.get('MEM_LIMIT'))
+            mem_limit = float("%.2f" % (mem_limit/ BYTES_IN_GIG))
         else:
-            mem_limit = float("%.1f" %
+            mem_limit = float("%.2f" %
                               (psutil.virtual_memory().total / BYTES_IN_GIG))
-        return mem_limit
+        return float(mem_limit)
 
 
 def _jupyter_server_extension_paths():
